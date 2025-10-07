@@ -1,1 +1,1 @@
-# realsense_ros2
+# Intel Realsense for ROS2
