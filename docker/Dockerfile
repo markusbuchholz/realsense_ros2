@@ -17,6 +17,8 @@ RUN apt-get update \
     build-essential \
     cmake \
     git \
+    build-essential \
+    cmake \
     libssl-dev \
     libusb-1.0-0-dev \
     pkg-config \
@@ -71,7 +73,10 @@ RUN cd /usr/src/librealsense \
 FROM ${BASE_IMAGE} AS librealsense
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=Etc/UTC
+    TZ=Etc/UTC \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    ROS_DISTRO=foxy
 
 # Copy binaries from builder stage
 COPY --from=librealsense-builder /opt/librealsense /usr/local/
@@ -83,13 +88,14 @@ ENV PYTHONPATH=/usr/local/lib
 # Install dep packages
 RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
     && apt-get update \
-    && apt-get install -y --no-install-recommends \	
+    && apt-get install -y --no-install-recommends \
     libusb-1.0-0 \
     udev \
     apt-transport-https \
     ca-certificates \
     curl \
     software-properties-common \
+    git \
     libgtk-3-0 \
     libglfw3 \
     libgl1 \
@@ -112,8 +118,21 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
     gstreamer1.0-gl \
     gstreamer1.0-qt5 \
     mesa-utils \
+    locales \
+    gnupg2 \
+    lsb-release \
+    && locale-gen en_US en_US.UTF-8 \
+    && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | apt-key add - \
+    && echo "deb [arch=amd64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+    ros-foxy-desktop \
+    python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/* \
     && (dpkg-reconfigure --frontend noninteractive tzdata || true)
+
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /etc/bash.bashrc
 
 # Shows a list of connected Realsense devices
 CMD [ "rs-enumerate-devices", "--compact" ]
