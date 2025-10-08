@@ -15,10 +15,12 @@ sudo ./build.sh
 sudo ./run.sh
 ```
 
-## Run Apps
+
+## Run ROS 2 interface
 
 ```bash
-./realsense-viewer
-#or 
-./rs-depth
+# in the container
+source /opt/ros/humble/setup.bash
+
+ros2 launch realsense2_camera rs_launch.py pointcloud.enable:=true
 ```
