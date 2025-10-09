@@ -1,6 +1,7 @@
 # Intel Realsense for ROS2
 
 - [IntelRealSense](https://github.com/IntelRealSense/realsense-ros?tab=readme-ov-file)
+- [Intel Docs](https://amrdocs.intel.com/docs/2.2/index.html)
 ---
 
 ## Build Docker
