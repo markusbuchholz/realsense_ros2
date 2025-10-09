@@ -2,6 +2,7 @@
 
 - [IntelRealSense](https://github.com/IntelRealSense/realsense-ros?tab=readme-ov-file)
 - [Intel Docs](https://amrdocs.intel.com/docs/2.2/index.html)
+- [ORB_SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
 ---
 
 ## Build Docker
